@@ -45,10 +45,16 @@ public class ProductController {
     @GetMapping("/products/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable("id") long productId)
     {
-        String uri="http://localhost:8080/api/products/"+productId;
-        RestTemplate restTemplate=new RestTemplate();
-        ResponseEntity<Product> productValue=restTemplate.getForEntity(uri,Product.class);
-        Product product= productValue.getBody();
-        return new ResponseEntity<>(product, HttpStatus.OK);
+        try {
+            String uri="http://localhost:8080/api/products/"+productId;
+            RestTemplate restTemplate=new RestTemplate();
+            ResponseEntity<Product> productValue=restTemplate.getForEntity(uri,Product.class);
+            Product product= productValue.getBody();
+            return new ResponseEntity<>(product, HttpStatus.OK);
+        } catch (RestClientException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
+
+
 }
